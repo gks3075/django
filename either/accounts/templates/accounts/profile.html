@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block body %}
+<h3>
+  id : {{ user.username }}
+</h3>
+{% if request.user == user %}
+  <p>  name : {{ user.last_name }}{{ user.first_name }}</p>
+  <p>  email : {{ user.email }}</p>
+  <button class="btn btn-light"><a href="{% url 'accounts:update' %}" class="nav-link text-decorator-none text-reset">회원정보수정</a></button>
+{% endif %}
+<hr>
+{% for comment in user.comment_set.all %}
+  <h3>{{ comment.article.title }}</h3>
+  {% if comment.choice == 'B' %}
+    <div class="bg-info text-white">{{ comment.article.choice1 }}</div>
+  {% else %}
+  <div class="bg-danger text-white">{{ comment.article.choice2 }}</div>
+  {% endif %}
+{% endfor %}
+
+
+{% endblock body %}

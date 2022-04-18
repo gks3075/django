@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block body %}
+<h1>{{ article.title }}</h1>
+<div class="d-flex container-fluid">
+  <div class="bg-info text-white container-fluid text-center"><h3>{{ B_percent|floatformat }}%</h3></div>
+  <div class="bg-danger text-white container-fluid text-center"><h2>{{ R_percent|floatformat }}%</h2></div>
+</div>
+<div class="d-flex container-fluid ">
+  <div class="bg-info text-white container-fluid text-center"><h3>{{ article.choice1|center:"50" }}</h3></div>
+  <div class="bg-danger text-white container-fluid text-center"><h2>{{ article.choice2|center:"50" }}</h2></div>
+</div>
+<hr>
+{% comment %} https://getbootstrap.com/docs/4.0/components/progress/ {% endcomment %}
+<form action="{% url 'articles:comment_create' article.pk %}" method="POST">
+  {% csrf_token %}
+  {% bootstrap_form comment_form %}
+  <input type="submit" value="댓글 달기">
+</form>
+<hr>
+{% for comment in article.comment_set.all %}
+  {% if comment.choice == 'B' %}
+    <div class="bg-info text-white"><a href="{% url 'accounts:profile' comment.user.pk %}" class="text-decorator-none text-reset">{{ comment.user }}</a> : {{ comment.content }}</div>
+  {% else %}
+  <div class="bg-danger text-white"><a href="{% url 'accounts:profile' comment.user.pk %}" class="text-decorator-none text-reset">{{ comment.user }}</a> : {{ comment.content }}</div>
+  {% endif %}
+{% endfor %}
+{% endblock body %}

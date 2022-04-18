@@ -1,0 +1,40 @@
+{% load bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  {% bootstrap_css %}
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'articles:index' %}">목록으로</a>
+      <div class="navbar-nav">
+        {% if request.user.is_authenticated %}
+          <button class="btn btn-light"><a href="{% url 'accounts:profile' request.user.pk %}" class="nav-link text-decorator-none text-reset">반갑습니다. {{ request.user.username }}님</a></button>
+          {% comment %} <button class="btn btn-light"><a href="{% url 'accounts:update' %}" class="nav-link text-decorator-none text-reset">회원정보수정</a></button> {% endcomment %}
+          <form action="{% url 'accounts:logout' %}" method="POST" class="nav-link">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-light">로그아웃</button>
+          </form>
+        {% else %}
+          <button class="btn btn-light"><a href="{% url 'accounts:login' %}" class="nav-link text-decorator-none text-reset">로그인</a></button>
+          <button class="btn btn-light"><a href="{% url 'accounts:signup' %}" class="nav-link text-decorator-none text-reset">회원가입</a></button>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <h1>EITHER</h1>
+    <hr>
+    {% block body %}
+    
+    {% endblock body %}
+  </div>
+
+  {% bootstrap_javascript %}
+</body>
+</html>
